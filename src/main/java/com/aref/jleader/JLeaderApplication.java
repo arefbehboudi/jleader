@@ -9,9 +9,9 @@ import java.util.List;
 
 public class JLeaderApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
         List<Container> containers = new ArrayList<>();
-        containers.add(new Container());
+        containers.add(new Container("1", "Test"));
         CliUtils.printList(containers);
     }
 
@@ -21,8 +21,13 @@ public class JLeaderApplication {
         @CliField(name = "Container ID")
         private String id;
 
-        @CliField(name = "Name")
+        @CliField(name = "Name 1234")
         private String name;
+
+        public Container(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
 
 }
