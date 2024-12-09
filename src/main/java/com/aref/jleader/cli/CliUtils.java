@@ -59,16 +59,6 @@ public class CliUtils {
             borderLength += name.length();
         }
         length.append("|\n");
-//
-//        // Determine row color based on the container's status (e.g., green for "Running", yellow for "Exited")
-//        String rowColor = CYAN;
-//        if ("Running".equals(status)) {
-//            rowColor = GREEN;
-//        } else if ("Exited".equals(status)) {
-//            rowColor = YELLOW;
-//        }
-//
-//        // Print each row with aligned columns and colored status
         System.out.printf(BLUE + length, values);
         System.out.println(RESET + "| " + "-".repeat(borderLength + 3) + " |");
 
