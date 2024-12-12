@@ -2,6 +2,7 @@ package com.aref.jleader.cli;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
 import static com.aref.jleader.cli.Color.*;
 
 
@@ -33,7 +34,7 @@ public class TableFormatter<T> {
         System.out.println(border);
         System.out.print("|");
         for (int i = 0; i < fields.length; i++) {
-            System.out.printf(HEADER_COLOR + " %-"+columnWidths[i]+"s " + RESET + BORDER_COLOR + "|" + RESET, fields[i].getName());
+            System.out.printf(HEADER_COLOR + " %-" + columnWidths[i] + "s " + RESET + BORDER_COLOR + "|" + RESET, fields[i].getName());
         }
         System.out.println();
         System.out.println(border);
@@ -45,9 +46,9 @@ public class TableFormatter<T> {
                 try {
                     Object value = fields[i].get(obj);
                     String color = useAlternateColor ? ALTERNATE_DATA_COLOR : DATA_COLOR;
-                    System.out.printf(color + " %-"+columnWidths[i]+"s " + RESET + BORDER_COLOR + "|" + RESET, value != null ? value.toString() : "null");
+                    System.out.printf(color + " %-" + columnWidths[i] + "s " + RESET + BORDER_COLOR + "|" + RESET, value != null ? value.toString().replaceAll("\n", "") : "null");
                 } catch (IllegalAccessException e) {
-                    System.out.printf(RED + " %-"+columnWidths[i]+"s " + RESET + BORDER_COLOR + "|" + RESET, "ERROR");
+                    System.out.printf(RED + " %-" + columnWidths[i] + "s " + RESET + BORDER_COLOR + "|" + RESET, "ERROR");
                 }
             }
             System.out.println();
@@ -56,17 +57,4 @@ public class TableFormatter<T> {
         System.out.println(border);
     }
 
-    // Recursively retrieves all fields from a class (including nested classes)
-    public static Field[] getAllFields(Class<?> clazz) {
-        Field[] fields = clazz.getDeclaredFields();
-        Class<?> superclass = clazz.getSuperclass();
-        if (superclass != null) {
-            Field[] superclassFields = getAllFields(superclass); // Recursively add superclass fields
-            Field[] allFields = new Field[fields.length + superclassFields.length];
-            System.arraycopy(superclassFields, 0, allFields, 0, superclassFields.length);
-            System.arraycopy(fields, 0, allFields, superclassFields.length, fields.length);
-            return allFields;
-        }
-        return fields;
-    }
 }

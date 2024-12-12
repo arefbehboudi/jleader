@@ -3,51 +3,61 @@ package com.aref.jleader.image;
 
 import com.google.protobuf.Timestamp;
 import containerd.services.images.v1.ImagesOuterClass;
+import containerd.types.DescriptorOuterClass;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Image {
 
-    // Name provides a unique name for the image.
     private String name;
 
-    // Labels provides free form labels for the image.
     private Map<String, String> labels;
 
-    // Target describes the content entry point of the image.
-    private Descriptor target;
+    private Timestamp createdAt;
 
-    // CreatedAt is the time the image was first created.
-    private Timestamp createdAt; // ISO 8601 formatted string for Timestamp
+    private Timestamp updatedAt;
 
-    // UpdatedAt is the last time the image was mutated.
-    private Timestamp updatedAt; // ISO 8601 formatted string for Timestamp
+    private String mediaType;
 
-    // Constructor
-    public Image(String name, Map<String, String> labels,
-                 Descriptor target,
-                 Timestamp createdAt, Timestamp updatedAt) {
+    private String digest;
+
+    private long size;
+
+    private Map<String, String> annotations;
+
+    public Image(String name,
+                 Map<String, String> labels,
+                 Timestamp createdAt,
+                 Timestamp updatedAt,
+                 String mediaType,
+                 String digest,
+                 long size,
+                 Map<String, String> annotations) {
         this.name = name;
         this.labels = labels;
-        this.target = target;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.mediaType = mediaType;
+        this.digest = digest;
+        this.size = size;
+        this.annotations = annotations;
     }
 
-
-
     public static Image fromProtobuf(ImagesOuterClass.Image protoImage) {
-        Descriptor target = Descriptor.fromProtobuf(protoImage.getTarget());
+        DescriptorOuterClass.Descriptor descriptor = protoImage.getTarget();
 
         Map<String, String> labels = new HashMap<>(protoImage.getLabelsMap());
 
         return new Image(
                 protoImage.getName(),
                 labels,
-                target,
                 protoImage.getCreatedAt(),
-                protoImage.getUpdatedAt()
+                protoImage.getUpdatedAt(),
+                descriptor.getMediaType(),
+                descriptor.getDigest(),
+                descriptor.getSize(),
+                descriptor.getAnnotationsMap()
         );
     }
 }
